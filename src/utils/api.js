@@ -36,6 +36,11 @@ function handleValidate(schema, data, callback) {
 	});
 }
 
+// Check API server status
+export function __api_ping() {
+	return axios.get("/ping");
+}
+
 export function __api_getCoinsMarkets(query) {
 	return handleValidate(getCoinsMarketsSchema, query, (validData) => {
 		const { price_change_percentage } = validData;
