@@ -1,7 +1,7 @@
 import axios from "utils/axios";
 import querystring from "query-string";
 import { notification } from "antd";
-import { getCoinsMarketsSchema } from "schema";
+import { getCoinListSchema, getCoinsMarketsSchema } from "schema";
 
 function queryStringify(data) {
 	return querystring.stringify(data, {
@@ -48,4 +48,18 @@ export function __api_getCoinsMarkets(query) {
 			validData.price_change_percentage = price_change_percentage.join();
 		return axios.get(`/coins/markets?${queryStringify(validData)}`);
 	});
+}
+
+export function __api_getSupportedVsCurrencies() {
+	return axios.get(`/simple/supported_vs_currencies`);
+}
+
+export function __api_getCoinList(query) {
+	return handleValidate(getCoinListSchema, query, (validData) => {
+		return axios.get(`/coins/list?${queryStringify(validData)}`);
+	});
+}
+
+export function __api_getCategoryList() {
+	return axios.get(`/coins/categories/list`);
 }

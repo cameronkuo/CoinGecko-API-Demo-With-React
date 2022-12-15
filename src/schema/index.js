@@ -2,7 +2,7 @@ import joi from "joi";
 
 export const getCoinsMarketsSchema = joi.object({
 	vs_currency: joi.string().required(),
-	ids: joi.string().allow(""),
+	ids: joi.array().items(joi.string()),
 	category: joi.string().allow(""),
 	order: joi
 		.string()
@@ -23,4 +23,8 @@ export const getCoinsMarketsSchema = joi.object({
 	price_change_percentage: joi
 		.array()
 		.items(joi.string().allow("1h", "24h", "7d", "14d", "30d", "200d", "1y")),
+});
+
+export const getCoinListSchema = joi.object({
+	include_platform: joi.boolean(),
 });
