@@ -1,4 +1,4 @@
-import { Select, Space, Switch } from "antd";
+import { Button, Select, Space, Switch } from "antd";
 import React from "react";
 import {
 	__api_getCategoryList,
@@ -29,15 +29,27 @@ class Filters extends React.Component {
 		this.onChange = this.onChange.bind(this);
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
 		this.setState({
 			loading__vs_currency: true,
 			loading__coin_list: true,
 			loading__category_list: true,
 		});
-		this.getSupportedVsCurrencies();
-		this.getCoinList();
-		this.getCategoryList();
+		await this.getSupportedVsCurrencies().then((res) => {
+			this.setState({
+				query: {
+					...this.state.query,
+					vs_currency: res[0],
+				},
+			});
+		});
+		await this.getCoinList();
+		await this.getCategoryList();
+		this.props.onSearch(this.queryState);
+	}
+
+	get queryState() {
+		return Object.assign({}, this.state.query);
 	}
 
 	getSupportedVsCurrencies() {
@@ -49,6 +61,7 @@ class Filters extends React.Component {
 					value,
 				})),
 			});
+			return res;
 		});
 	}
 
@@ -62,6 +75,7 @@ class Filters extends React.Component {
 					value: item.id,
 				})),
 			});
+			return res;
 		});
 	}
 
@@ -74,11 +88,11 @@ class Filters extends React.Component {
 					value: item.category_id,
 				})),
 			});
+			return res;
 		});
 	}
 
 	onChange(queryName, val) {
-		console.log(queryName, val);
 		this.setState({
 			query: {
 				...this.state.query,
@@ -138,6 +152,9 @@ class Filters extends React.Component {
 					value={this.state.query.category}
 					onChange={(val) => this.onChange("category", val)}
 				/>
+				<Button onClick={() => this.props.onSearch(this.queryState)}>
+					搜尋
+				</Button>
 			</Space>
 		);
 	}
