@@ -72,42 +72,41 @@ class App extends React.Component {
 					autoSize={{ minRows: 3, maxRows: 10 }}
 				/> */}
 				<Filters ref={this.filterRef} onSearch={this.getCoinsMarkets} />
-				<Spin spinning={this.state.loading__coins_markets} size="large">
-					<InfiniteScroll
-						dataLength={this.state.coinsMarkets.length} //This is important field to render the next data
-						next={async () =>
-							await this.getCoinsMarkets(this.filterRef.current.queryState)
-						}
-						hasMore={true}
-						loader={<h4>Loading...</h4>}
-						endMessage={
-							<p style={{ textAlign: "center" }}>
-								<b>Yay! You have seen it all</b>
-							</p>
-						}
-						// below props only if you need pull down functionality
-						refreshFunction={() => {
-							this.getCoinsMarkets(this.filterRef.current.queryState);
-						}}
-						pullDownToRefresh
-						pullDownToRefreshThreshold={1000}
-						pullDownToRefreshContent={
-							<h3 style={{ textAlign: "center" }}>
-								&#8595; Pull down to refresh
-							</h3>
-						}
-						releaseToRefreshContent={
-							<h3 style={{ textAlign: "center" }}>
-								&#8593; Release to refresh
-							</h3>
-						}
-					>
+				<InfiniteScroll
+					dataLength={this.state.coinsMarkets.length} //This is important field to render the next data
+					next={async () =>
+						await this.getCoinsMarkets(this.filterRef.current.queryState)
+					}
+					scrollThreshold={1}
+					hasMore={true}
+					loader={<Spin tip="Loading..." style={{ width: "100%" }} />}
+					endMessage={
+						<p style={{ textAlign: "center" }}>
+							<b>沒有更多資料</b>
+						</p>
+					}
+					// below props only if you need pull down functionality
+					refreshFunction={() => {
+						this.getCoinsMarkets(this.filterRef.current.queryState);
+					}}
+					pullDownToRefresh
+					pullDownToRefreshThreshold={1000}
+					pullDownToRefreshContent={
+						<h3 style={{ textAlign: "center" }}>
+							&#8595; Pull down to refresh
+						</h3>
+					}
+					releaseToRefreshContent={
+						<h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
+					}
+				>
+					<Spin spinning={this.state.loading__coins_markets} size="large">
 						<Table
 							dataSource={this.state.coinsMarkets}
 							pagination={this.state.pagination}
 						/>
-					</InfiniteScroll>
-				</Spin>
+					</Spin>
+				</InfiniteScroll>
 			</ConfigProvider>
 		);
 	}
