@@ -22,11 +22,6 @@ class Filters extends React.Component {
 				category: "",
 			},
 		};
-
-		this.getSupportedVsCurrencies = this.getSupportedVsCurrencies.bind(this);
-		this.getCoinList = this.getCoinList.bind(this);
-		this.getCategoryList = this.getCategoryList.bind(this);
-		this.onChange = this.onChange.bind(this);
 	}
 
 	async componentDidMount() {
@@ -132,7 +127,7 @@ class Filters extends React.Component {
 				<Select
 					placeholder="選擇幣別"
 					style={{
-						width: 150,
+						width: 200,
 					}}
 					mode="multiple"
 					allowClear

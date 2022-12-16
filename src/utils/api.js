@@ -43,9 +43,9 @@ export function __api_ping() {
 
 export function __api_getCoinsMarkets(query) {
 	return handleValidate(getCoinsMarketsSchema, query, (validData) => {
-		const { price_change_percentage } = validData;
-		if (price_change_percentage?.length)
-			validData.price_change_percentage = price_change_percentage.join();
+		["ids", "price_change_percentage"].forEach((key) => {
+			if (validData[key]?.length) validData[key] = validData[key].join();
+		});
 		return axios.get(`/coins/markets?${queryStringify(validData)}`);
 	});
 }
