@@ -12,7 +12,9 @@ const App = (props) => {
 				<thead>
 					<tr>
 						{props.columns.map((column) => (
-							<th key={column.dataIndex}>{column.title}</th>
+							<th key={column.dataIndex} className={"p-2"}>
+								{column.title}
+							</th>
 						))}
 					</tr>
 				</thead>
@@ -45,11 +47,11 @@ const App = (props) => {
 						{props.dataSource.map((row) => (
 							<tr key={row.id}>
 								{props.columns.map((column) => (
-									<th key={column.dataIndex}>
+									<td key={column.dataIndex} className={"p-2"}>
 										{typeof column.render === "function"
 											? column.render(row[column.dataIndex], row)
 											: row[column.dataIndex]}
-									</th>
+									</td>
 								))}
 							</tr>
 						))}
