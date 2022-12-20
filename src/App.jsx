@@ -123,7 +123,19 @@ class App extends React.Component {
 					value={JSON.stringify(this.state.coinsMarkets, null, 4)}
 					autoSize={{ minRows: 3, maxRows: 10 }}
 				/> */}
-				<Filters ref={this.filterRef} onSearch={this.getCoinsMarkets} />
+				<Filters
+					ref={this.filterRef}
+					onSearch={(query) => {
+						this.setState({
+							coinsMarkets: [],
+							pagination: {
+								...this.state.pagination,
+								page: 1,
+							},
+						});
+						this.getCoinsMarkets(query);
+					}}
+				/>
 				<InfiniteScrollTable
 					columns={columns}
 					dataSource={this.state.coinsMarkets}
