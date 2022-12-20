@@ -2,9 +2,61 @@ import React from "react";
 import { ConfigProvider, Spin, theme } from "antd";
 import Filters from "components/Filters";
 import { __api_getCoinsMarkets, __api_ping } from "utils/api";
-import Table from "components/Table";
-import InfiniteScroll from "react-infinite-scroll-component";
+import InfiniteScrollTable from "components/InfiniteScrollTable";
 import TextArea from "antd/es/input/TextArea";
+
+// interface DataType {
+// 	ath: number;
+// 	ath_change_percentage: number;
+// 	ath_date: string;
+// 	atl: number;
+// 	atl_change_percentage: number;
+// 	atl_date: string;
+// 	circulating_supply: number;
+// 	current_price: number;
+// 	fully_diluted_valuation: number;
+// 	high_24h: number;
+// 	id: string;
+// 	image: string;
+// 	last_updated: string;
+// 	low_24h: number;
+// 	market_cap: number;
+// 	market_cap_change_24h: number;
+// 	market_cap_change_percentage_24h: number;
+// 	market_cap_rank: number;
+// 	max_supply: number | null;
+// 	name: string;
+// 	price_change_24h: number;
+// 	price_change_percentage_24h: number;
+// 	roi: {
+// 		currency: string,
+// 		percentage: number,
+// 		times: number,
+// 	} | null;
+// 	symbol: string;
+// 	total_supply: number;
+// 	total_volume: number;
+// }
+
+const columns = [
+	{
+		title: "",
+		dataIndex: "image",
+		render: (image, { name }) => <img src={image} alt={name} width="30" />,
+	},
+	{
+		title: "名稱",
+		dataIndex: "name",
+	},
+	{
+		title: "Market Cap",
+		dataIndex: "market_cap",
+	},
+	{
+		title: "Total Volumn",
+		dataIndex: "total_volume",
+	},
+];
 
 class App extends React.Component {
 	constructor(props) {
@@ -72,41 +124,15 @@ class App extends React.Component {
 					autoSize={{ minRows: 3, maxRows: 10 }}
 				/> */}
 				<Filters ref={this.filterRef} onSearch={this.getCoinsMarkets} />
-				<InfiniteScroll
-					dataLength={this.state.coinsMarkets.length} //This is important field to render the next data
-					next={async () =>
+				<InfiniteScrollTable
+					columns={columns}
+					dataSource={this.state.coinsMarkets}
+					height={500}
+					fecthMethod={async () =>
 						await this.getCoinsMarkets(this.filterRef.current.queryState)
 					}
-					scrollThreshold={1}
-					hasMore={true}
 					loader={<Spin tip="Loading..." style={{ width: "100%" }} />}
-					endMessage={
-						<p style={{ textAlign: "center" }}>
-							<b>沒有更多資料</b>
-						</p>
-					}
-					// below props only if you need pull down functionality
-					refreshFunction={() => {
-						this.getCoinsMarkets(this.filterRef.current.queryState);
-					}}
-					pullDownToRefresh
-					pullDownToRefreshThreshold={1000}
-					pullDownToRefreshContent={
-						<h3 style={{ textAlign: "center" }}>
-							&#8595; Pull down to refresh
-						</h3>
-					}
-					releaseToRefreshContent={
-						<h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
-					}
-				>
-					<Spin spinning={this.state.loading__coins_markets} size="large">
-						<Table
-							dataSource={this.state.coinsMarkets}
-							pagination={this.state.pagination}
-						/>
-					</Spin>
-				</InfiniteScroll>
+				/>
 			</ConfigProvider>
 		);
 	}
