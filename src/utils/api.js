@@ -41,6 +41,10 @@ export function __api_ping() {
 	return axios.get("/ping");
 }
 
+export function __api_getSupportedVsCurrencies() {
+	return axios.get(`/simple/supported_vs_currencies`);
+}
+
 export function __api_getCoinsMarkets(query) {
 	return handleValidate(getCoinsMarketsSchema, query, (validData) => {
 		["ids", "price_change_percentage"].forEach((key) => {
@@ -48,10 +52,6 @@ export function __api_getCoinsMarkets(query) {
 		});
 		return axios.get(`/coins/markets?${queryStringify(validData)}`);
 	});
-}
-
-export function __api_getSupportedVsCurrencies() {
-	return axios.get(`/simple/supported_vs_currencies`);
 }
 
 export function __api_getCoinList(query) {

@@ -1,42 +1,10 @@
 import React from "react";
 import { Spin } from "antd";
-import Filters from "components/Filters";
 import { __api_getCoinsMarkets, __api_ping } from "utils/api";
+// import TextArea from "antd/es/input/TextArea";
+import Filters from "components/Filters";
 import InfiniteScrollTable from "components/InfiniteScrollTable";
-import TextArea from "antd/es/input/TextArea";
-
-// interface DataType {
-// 	ath: number;
-// 	ath_change_percentage: number;
-// 	ath_date: string;
-// 	atl: number;
-// 	atl_change_percentage: number;
-// 	atl_date: string;
-// 	circulating_supply: number;
-// 	current_price: number;
-// 	fully_diluted_valuation: number;
-// 	high_24h: number;
-// 	id: string;
-// 	image: string;
-// 	last_updated: string;
-// 	low_24h: number;
-// 	market_cap: number;
-// 	market_cap_change_24h: number;
-// 	market_cap_change_percentage_24h: number;
-// 	market_cap_rank: number;
-// 	max_supply: number | null;
-// 	name: string;
-// 	price_change_24h: number;
-// 	price_change_percentage_24h: number;
-// 	roi: {
-// 		currency: string,
-// 		percentage: number,
-// 		times: number,
-// 	} | null;
-// 	symbol: string;
-// 	total_supply: number;
-// 	total_volume: number;
-// }
+import Sparkline from "components/Sparkline";
 
 const columns = [
 	{
@@ -49,12 +17,25 @@ const columns = [
 		dataIndex: "name",
 	},
 	{
-		title: "Market Cap",
+		title: "匯率",
+		dataIndex: "current_price",
+	},
+	{
+		title: "24小時交易量",
+		dataIndex: "total_volume",
+	},
+	{
+		title: "24小時匯率變化",
+		dataIndex: "price_change_percentage_24h",
+	},
+	{
+		title: "總市值",
 		dataIndex: "market_cap",
 	},
 	{
-		title: "Total Volumn",
-		dataIndex: "total_volume",
+		title: "最近７天",
+		dataIndex: "sparkline_in_7d",
+		render: (sparkline_in_7d) => <Sparkline data={sparkline_in_7d.price} />,
 	},
 ];
 

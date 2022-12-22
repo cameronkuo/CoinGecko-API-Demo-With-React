@@ -47,7 +47,7 @@ const App = (props) => {
 						{props.dataSource.map((row) => (
 							<tr key={row.id}>
 								{props.columns.map((column) => (
-									<td key={column.dataIndex} className={"p-2"}>
+									<td key={column.dataIndex} className="p-1 text-center">
 										{typeof column.render === "function"
 											? column.render(row[column.dataIndex], row)
 											: row[column.dataIndex]}

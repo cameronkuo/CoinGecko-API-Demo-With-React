@@ -20,6 +20,7 @@ class Filters extends React.Component {
 				vs_currency: "",
 				ids: [],
 				category: "",
+				sparkline: true,
 			},
 		};
 	}
