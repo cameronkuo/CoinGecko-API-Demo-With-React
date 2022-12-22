@@ -106,6 +106,7 @@ class Filters extends React.Component {
 						width: 120,
 					}}
 					allowClear
+					showSearch
 					loading={this.state.loading__vs_currency}
 					options={this.state.options__vs_currency}
 					value={this.state.query.vs_currency}

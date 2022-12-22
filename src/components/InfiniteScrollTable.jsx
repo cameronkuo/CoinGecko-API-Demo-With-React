@@ -1,19 +1,36 @@
+import { CaretDownFilled, CaretUpFilled } from "@ant-design/icons";
+import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-
 const tableStyle = {
 	width: "100%",
 	tableLayout: "fixed",
 };
 
 const App = (props) => {
+	const [sortBy, setSortBy] = useState("market_cap_desc");
+	useEffect(() => {
+		props.onSort(sortBy);
+	}, [sortBy]);
+
 	return (
 		<div>
 			<table style={tableStyle}>
 				<thead>
 					<tr>
 						{props.columns.map((column) => (
-							<th key={column.dataIndex} className={"p-2"}>
+							<th
+								key={column.dataIndex}
+								className={`p-2 ${column.sortBy ? "cursor-pointer" : ""}`}
+								onClick={() => {
+									if (sortBy === column.sortBy.desc)
+										setSortBy(column.sortBy.asc);
+									else if (sortBy === column.sortBy.asc) setSortBy("");
+									else setSortBy(column.sortBy.desc);
+								}}
+							>
 								{column.title}
+								{column.sortBy?.desc === sortBy ? <CaretDownFilled /> : null}
+								{column.sortBy?.asc === sortBy ? <CaretUpFilled /> : null}
 							</th>
 						))}
 					</tr>

@@ -35,6 +35,10 @@ const columns = [
 	{
 		title: "總市值",
 		dataIndex: "market_cap",
+		sortBy: {
+			desc: "market_cap_desc",
+			asc: "market_cap_asc",
+		},
 		render: (val) => numeral(val).format(),
 	},
 	{
@@ -74,27 +78,33 @@ class App extends React.Component {
 
 	getCoinsMarkets(query) {
 		return new Promise(async (resolve) => {
-			await this.setState({
-				loading__coins_markets: true,
-			});
-			__api_getCoinsMarkets({
-				...query,
-				...this.state.pagination,
-			}).then((res) => {
-				setTimeout(() => {
-					this.setState({
-						loading__coins_markets: false,
-						pagination: {
-							...this.state.pagination,
-							page: this.state.pagination.page + 1,
-						},
-						coinsMarkets: this.state.coinsMarkets.concat(
-							Array.isArray(res) ? res : []
-						),
+			this.setState(
+				{
+					loading__coins_markets: true,
+				},
+				() => {
+					__api_getCoinsMarkets({
+						...query,
+						...this.state.pagination,
+					}).then((res) => {
+						this.setState(
+							{
+								loading__coins_markets: false,
+								pagination: {
+									...this.state.pagination,
+									page: this.state.pagination.page + 1,
+								},
+								coinsMarkets: this.state.coinsMarkets.concat(
+									Array.isArray(res) ? res : []
+								),
+							},
+							() => {
+								resolve(this.state.coinsMarkets);
+							}
+						);
 					});
-					resolve(this.state.coinsMarkets);
-				}, 1000);
-			});
+				}
+			);
 		});
 	}
 
@@ -108,14 +118,18 @@ class App extends React.Component {
 				<Filters
 					ref={this.filterRef}
 					onSearch={(query) => {
-						this.setState({
-							coinsMarkets: [],
-							pagination: {
-								...this.state.pagination,
-								page: 1,
+						this.setState(
+							{
+								coinsMarkets: [],
+								pagination: {
+									...this.state.pagination,
+									page: 1,
+								},
 							},
-						});
-						this.getCoinsMarkets(query);
+							() => {
+								this.getCoinsMarkets(query);
+							}
+						);
 					}}
 				/>
 				<InfiniteScrollTable
@@ -126,6 +140,23 @@ class App extends React.Component {
 						await this.getCoinsMarkets(this.filterRef.current.queryState)
 					}
 					loader={<Spin tip="Loading..." style={{ width: "100%" }} />}
+					onSort={(order) => {
+						this.setState(
+							{
+								coinsMarkets: [],
+								pagination: {
+									...this.state.pagination,
+									page: 1,
+								},
+							},
+							() => {
+								this.getCoinsMarkets({
+									...this.filterRef.current.queryState,
+									order,
+								});
+							}
+						);
+					}}
 				/>
 			</>
 		);
