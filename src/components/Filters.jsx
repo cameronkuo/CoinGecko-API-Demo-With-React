@@ -17,10 +17,10 @@ class Filters extends React.Component {
 			loading__category_list: false,
 			options__category_list: [],
 			query: {
-				vs_currency: "",
-				ids: [],
-				category: "",
-				sparkline: true,
+				vs_currency: props.vs_currency ?? "",
+				ids: props.ids ?? [],
+				category: props.category ?? "",
+				sparkline: props.sparkline ?? true,
 			},
 		};
 	}

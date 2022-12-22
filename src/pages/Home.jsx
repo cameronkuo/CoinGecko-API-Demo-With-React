@@ -58,6 +58,13 @@ class App extends React.Component {
 				page: 1,
 				per_page: 25,
 			},
+			query: {
+				vs_currency: "",
+				ids: [],
+				category: "",
+				sparkline: true,
+				order: "market_cap_desc",
+			},
 		};
 		this.filterRef = React.createRef();
 		this.getCoinsMarkets = this.getCoinsMarkets.bind(this);
@@ -76,7 +83,7 @@ class App extends React.Component {
 		});
 	}
 
-	getCoinsMarkets(query) {
+	getCoinsMarkets() {
 		return new Promise(async (resolve) => {
 			this.setState(
 				{
@@ -84,7 +91,7 @@ class App extends React.Component {
 				},
 				() => {
 					__api_getCoinsMarkets({
-						...query,
+						...this.state.query,
 						...this.state.pagination,
 					}).then((res) => {
 						this.setState(
@@ -117,6 +124,7 @@ class App extends React.Component {
 				/> */}
 				<Filters
 					ref={this.filterRef}
+					defaultQuery={this.state.query}
 					onSearch={(query) => {
 						this.setState(
 							{
@@ -125,9 +133,13 @@ class App extends React.Component {
 									...this.state.pagination,
 									page: 1,
 								},
+								query: {
+									...this.state.query,
+									...query,
+								},
 							},
 							() => {
-								this.getCoinsMarkets(query);
+								this.getCoinsMarkets();
 							}
 						);
 					}}
@@ -136,10 +148,9 @@ class App extends React.Component {
 					columns={columns}
 					dataSource={this.state.coinsMarkets}
 					height={500}
-					fecthMethod={async () =>
-						await this.getCoinsMarkets(this.filterRef.current.queryState)
-					}
+					fecthMethod={async () => await this.getCoinsMarkets()}
 					loader={<Spin tip="Loading..." style={{ width: "100%" }} />}
+					defaultSortBy={this.state.query.order}
 					onSort={(order) => {
 						this.setState(
 							{
@@ -148,12 +159,13 @@ class App extends React.Component {
 									...this.state.pagination,
 									page: 1,
 								},
+								query: {
+									...this.state.query,
+									order,
+								},
 							},
 							() => {
-								this.getCoinsMarkets({
-									...this.filterRef.current.queryState,
-									order,
-								});
+								this.getCoinsMarkets();
 							}
 						);
 					}}

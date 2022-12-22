@@ -7,7 +7,7 @@ const tableStyle = {
 };
 
 const App = (props) => {
-	const [sortBy, setSortBy] = useState("market_cap_desc");
+	const [sortBy, setSortBy] = useState(props.defaultSortBy ?? "");
 	useEffect(() => {
 		props.onSort(sortBy);
 	}, [sortBy]);
