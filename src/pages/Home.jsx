@@ -1,5 +1,6 @@
 import React from "react";
 import { Spin } from "antd";
+import numeral from "numeral";
 import { __api_getCoinsMarkets, __api_ping } from "utils/api";
 // import TextArea from "antd/es/input/TextArea";
 import Filters from "components/Filters";
@@ -10,19 +11,22 @@ const columns = [
 	{
 		title: "",
 		dataIndex: "image",
-		render: (image, { name }) => <img src={image} alt={name} width="30" />,
+		render: (val, { name }) => <img src={val} alt={name} width="30" />,
 	},
 	{
 		title: "名稱",
 		dataIndex: "name",
+		render: (val, { symbol }) => `${val} (${symbol.toUpperCase()})`,
 	},
 	{
 		title: "匯率",
 		dataIndex: "current_price",
+		render: (val) => numeral(val).format("0,0.[0000000000]"),
 	},
 	{
 		title: "24小時交易量",
 		dataIndex: "total_volume",
+		render: (val) => numeral(val).format("0,0.[00000]"),
 	},
 	{
 		title: "24小時匯率變化",
@@ -31,11 +35,12 @@ const columns = [
 	{
 		title: "總市值",
 		dataIndex: "market_cap",
+		render: (val) => numeral(val).format(),
 	},
 	{
 		title: "最近７天",
 		dataIndex: "sparkline_in_7d",
-		render: (sparkline_in_7d) => <Sparkline data={sparkline_in_7d.price} />,
+		render: (val) => <Sparkline data={val.price} />,
 	},
 ];
 
