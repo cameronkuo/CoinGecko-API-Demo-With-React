@@ -31,21 +31,26 @@ class Filters extends React.Component {
 			loading__coin_list: true,
 			loading__category_list: true,
 		});
-		await this.getSupportedVsCurrencies().then((res) => {
-			this.setState({
-				query: {
-					...this.state.query,
-					vs_currency: res[0],
-				},
-			});
-		});
+		const vs_currency = await this.getSupportedVsCurrencies().then(
+			(res) => res[0]
+		);
 		await this.getCoinList();
 		await this.getCategoryList();
-		this.props.onSearch(this.queryState);
+		this.setState(
+			{
+				query: {
+					...this.state.query,
+					vs_currency,
+				},
+			},
+			() => {
+				this.props.onSearch(this.queryState);
+			}
+		);
 	}
 
 	get queryState() {
-		return Object.assign({}, this.state.query);
+		return JSON.parse(JSON.stringify(this.state.query));
 	}
 
 	getSupportedVsCurrencies() {

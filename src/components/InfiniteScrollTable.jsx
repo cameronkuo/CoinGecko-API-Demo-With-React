@@ -7,9 +7,11 @@ const tableStyle = {
 };
 
 const App = (props) => {
-	const [sortBy, setSortBy] = useState(props.defaultSortBy ?? "");
+	const { defaultSortBy, onSort } = props;
+	const [sortBy, setSortBy] = useState(`${defaultSortBy}` ?? "");
+
 	useEffect(() => {
-		props.onSort(sortBy);
+		if (sortBy !== defaultSortBy) onSort(sortBy);
 	}, [sortBy]);
 
 	return (
@@ -28,7 +30,7 @@ const App = (props) => {
 									else setSortBy(column.sortBy.desc);
 								}}
 							>
-								{column.title}
+								{column.title}&nbsp;
 								{column.sortBy?.desc === sortBy ? <CaretDownFilled /> : null}
 								{column.sortBy?.asc === sortBy ? <CaretUpFilled /> : null}
 							</th>
