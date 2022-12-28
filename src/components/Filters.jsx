@@ -17,10 +17,10 @@ class Filters extends React.Component {
 			loading__category_list: false,
 			options__category_list: [],
 			query: {
-				vs_currency: props.vs_currency ?? "",
-				ids: props.ids ?? [],
-				category: props.category ?? "",
-				sparkline: props.sparkline ?? true,
+				vs_currency: props.defaultQuery?.vs_currency ?? "",
+				ids: props.defaultQuery?.ids ?? [],
+				category: props.defaultQuery?.category ?? "",
+				sparkline: props.defaultQuery?.sparkline ?? true,
 			},
 		};
 	}
@@ -31,22 +31,10 @@ class Filters extends React.Component {
 			loading__coin_list: true,
 			loading__category_list: true,
 		});
-		const vs_currency = await this.getSupportedVsCurrencies().then(
-			(res) => res[0]
-		);
+		await this.getSupportedVsCurrencies();
 		await this.getCoinList();
 		await this.getCategoryList();
-		this.setState(
-			{
-				query: {
-					...this.state.query,
-					vs_currency,
-				},
-			},
-			() => {
-				this.props.onSearch(this.queryState);
-			}
-		);
+		this.props.onSearch(this.queryState);
 	}
 
 	get queryState() {
