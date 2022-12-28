@@ -108,7 +108,6 @@ class App extends React.Component {
 					loading__coins_markets: true,
 				},
 				() => {
-					console.log(this.state.query);
 					__api_getCoinsMarkets({
 						...this.state.query,
 						...this.state.pagination,
@@ -145,7 +144,6 @@ class App extends React.Component {
 					ref={this.filterRef}
 					defaultQuery={this.state.query}
 					onSearch={(query) => {
-						console.log(query);
 						this.setState(
 							{
 								coinsMarkets: [],
