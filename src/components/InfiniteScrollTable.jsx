@@ -1,10 +1,8 @@
 import { CaretDownFilled, CaretUpFilled } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-const tableStyle = {
-	width: "100%",
-	tableLayout: "fixed",
-};
+
+const tdClasses = ["p-2", "text-center", "whitespace-nowrap"];
 
 const App = (props) => {
 	const { defaultSortBy, onSort } = props;
@@ -15,30 +13,7 @@ const App = (props) => {
 	}, [sortBy]);
 
 	return (
-		<div>
-			<table style={tableStyle}>
-				<thead>
-					<tr>
-						{props.columns.map((column) => (
-							<th
-								key={column.dataIndex}
-								className={`p-2 ${column.sortBy ? "cursor-pointer" : ""}`}
-								onClick={() => {
-									if (sortBy === column.sortBy.desc)
-										setSortBy(column.sortBy.asc);
-									else if (sortBy === column.sortBy.asc) setSortBy("");
-									else setSortBy(column.sortBy.desc);
-								}}
-							>
-								{column.title}&nbsp;
-								{column.sortBy?.desc === sortBy ? <CaretDownFilled /> : null}
-								{column.sortBy?.asc === sortBy ? <CaretUpFilled /> : null}
-							</th>
-						))}
-					</tr>
-				</thead>
-			</table>
-
+		<div className="w-full overflow-x-auto">
 			<InfiniteScroll
 				dataLength={props.dataSource.length} //This is important field to render the next data
 				next={props.fecthMethod}
@@ -61,12 +36,56 @@ const App = (props) => {
 					<h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
 				}
 			>
-				<table style={tableStyle}>
+				<table className="w-full table-fixed">
+					<thead>
+						<tr>
+							{props.columns.map((column) => (
+								<th
+									key={column.dataIndex}
+									className={[
+										"sticky",
+										"top-0",
+										"bg-[var(--var-background-dark)]",
+									]
+										.concat(tdClasses)
+										.concat(column.className)
+										.concat(column.sortBy ? "cursor-pointer" : [])
+										.concat()
+										.join(" ")}
+									onClick={() => {
+										if (sortBy === column.sortBy.desc)
+											setSortBy(column.sortBy.asc);
+										else if (sortBy === column.sortBy.asc) setSortBy("");
+										else setSortBy(column.sortBy.desc);
+									}}
+									style={{
+										width: column.width,
+									}}
+								>
+									{column.title}&nbsp;
+									{column.sortBy?.desc === sortBy ? <CaretDownFilled /> : null}
+									{column.sortBy?.asc === sortBy ? <CaretUpFilled /> : null}
+								</th>
+							))}
+						</tr>
+					</thead>
 					<tbody>
 						{props.dataSource.map((row) => (
-							<tr key={row.id}>
+							<tr
+								key={row.id}
+								className="border-solid border-b border-gray-500 hover:bg-[rgba(249,250,251,0.1)]"
+							>
 								{props.columns.map((column) => (
-									<td key={column.dataIndex} className="p-1 text-center">
+									<td
+										key={column.dataIndex}
+										className={["z-0"]
+											.concat(tdClasses)
+											.concat(column.className)
+											.join(" ")}
+										style={{
+											width: column.width,
+										}}
+									>
 										{typeof column.render === "function"
 											? column.render(row[column.dataIndex], row)
 											: row[column.dataIndex]}

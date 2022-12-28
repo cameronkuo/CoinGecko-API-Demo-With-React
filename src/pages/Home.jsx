@@ -2,7 +2,7 @@ import React from "react";
 import { Spin } from "antd";
 import numeral from "numeral";
 import { __api_getCoinsMarkets, __api_ping } from "utils/api";
-// import TextArea from "antd/es/input/TextArea";
+import TextArea from "antd/es/input/TextArea";
 import Filters from "components/Filters";
 import InfiniteScrollTable from "components/InfiniteScrollTable";
 import Sparkline from "components/Sparkline";
@@ -11,30 +11,47 @@ const columns = [
 	{
 		title: "",
 		dataIndex: "image",
-		render: (val, { name }) => <img src={val} alt={name} width="30" />,
+		width: "100px",
+		className: ["sticky", "left-0", "bg-[var(--var-background-dark)]", "z-10"],
+		render: (val, { name }) => <img src={val} alt={name} className="w-8" />,
 	},
 	{
-		title: "名稱",
+		title: "Coin",
 		dataIndex: "name",
+		width: "200px",
+		className: [
+			"sticky",
+			"left-[100px]",
+			"bg-[var(--var-background-dark)]",
+			"z-10",
+		],
+		sortBy: {
+			desc: "id_desc",
+			asc: "id_asc",
+		},
 		render: (val, { symbol }) => `${val} (${symbol.toUpperCase()})`,
 	},
 	{
 		title: "匯率",
 		dataIndex: "current_price",
+		width: "150px",
 		render: (val) => numeral(val).format("0,0.[0000000000]"),
 	},
 	{
 		title: "24小時交易量",
 		dataIndex: "total_volume",
+		width: "150px",
 		render: (val) => numeral(val).format("0,0.[00000]"),
 	},
 	{
 		title: "24小時匯率變化",
 		dataIndex: "price_change_percentage_24h",
+		width: "150px",
 	},
 	{
 		title: "總市值",
 		dataIndex: "market_cap",
+		width: "150px",
 		sortBy: {
 			desc: "market_cap_desc",
 			asc: "market_cap_asc",
@@ -44,6 +61,7 @@ const columns = [
 	{
 		title: "最近７天",
 		dataIndex: "sparkline_in_7d",
+		width: "150px",
 		render: (val) => <Sparkline data={val.price} />,
 	},
 ];
@@ -59,7 +77,7 @@ class App extends React.Component {
 				per_page: 25,
 			},
 			query: {
-				vs_currency: "",
+				vs_currency: "usd",
 				ids: [],
 				category: "",
 				sparkline: true,
@@ -90,6 +108,7 @@ class App extends React.Component {
 					loading__coins_markets: true,
 				},
 				() => {
+					console.log(this.state.query);
 					__api_getCoinsMarkets({
 						...this.state.query,
 						...this.state.pagination,
@@ -118,14 +137,15 @@ class App extends React.Component {
 	render() {
 		return (
 			<>
-				{/* <TextArea
+				<TextArea
 					value={JSON.stringify(this.state.coinsMarkets, null, 4)}
 					autoSize={{ minRows: 3, maxRows: 10 }}
-				/> */}
+				/>
 				<Filters
 					ref={this.filterRef}
 					defaultQuery={this.state.query}
 					onSearch={(query) => {
+						console.log(query);
 						this.setState(
 							{
 								coinsMarkets: [],

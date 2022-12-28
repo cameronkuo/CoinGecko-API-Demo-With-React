@@ -15,6 +15,7 @@ function Sparkline(props) {
 					datasets: [{ data }],
 				},
 				options: {
+					responsive: false,
 					interaction: {
 						intersect: false,
 					},
