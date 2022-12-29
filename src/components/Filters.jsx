@@ -1,4 +1,4 @@
-import { Button, Select, Space, Switch } from "antd";
+import { Select, Space, Switch } from "antd";
 import React from "react";
 import {
 	__api_getCategoryList,
@@ -82,69 +82,83 @@ class Filters extends React.Component {
 	}
 
 	onChange(queryName, val) {
-		this.setState({
-			query: {
-				...this.state.query,
-				[queryName]: val,
+		this.setState(
+			{
+				query: {
+					...this.state.query,
+					[queryName]: val,
+				},
 			},
-		});
+			() => {
+				this.props.onSearch(this.queryState);
+			}
+		);
 	}
 
 	render() {
 		return (
-			<Space wrap>
-				<Select
-					placeholder="選擇幣別"
-					style={{
-						width: 120,
-					}}
-					allowClear
-					showSearch
-					loading={this.state.loading__vs_currency}
-					options={this.state.options__vs_currency}
-					value={this.state.query.vs_currency}
-					onChange={(val) => this.onChange("vs_currency", val)}
-				/>
-				<label>標記以包含平台合約地址</label>
-				<Switch
-					checkedChildren="是"
-					unCheckedChildren="否"
-					onChange={(include_platform) => {
-						this.setState({
-							query: {
-								...this.state.query,
-								ids: [],
-							},
-						});
-						this.getCoinList(include_platform);
-					}}
-				/>
-				<Select
-					placeholder="選擇幣別"
-					style={{
-						width: 200,
-					}}
-					mode="multiple"
-					allowClear
-					loading={this.state.loading__coin_list}
-					options={this.state.options__coin_list}
-					value={this.state.query.ids}
-					onChange={(val) => this.onChange("ids", val)}
-				/>
-				<Select
-					placeholder="選擇類別"
-					style={{
-						width: 200,
-					}}
-					allowClear
-					loading={this.state.loading__category_list}
-					options={this.state.options__category_list}
-					value={this.state.query.category}
-					onChange={(val) => this.onChange("category", val)}
-				/>
-				<Button onClick={() => this.props.onSearch(this.queryState)}>
-					搜尋
-				</Button>
+			<Space wrap align="start" size="large" className="p-2">
+				<Space className="flex flex-col items-start">
+					<label>相對應價格之貨幣</label>
+					<Select
+						placeholder="選擇幣別"
+						style={{
+							width: 120,
+						}}
+						allowClear
+						showSearch
+						loading={this.state.loading__vs_currency}
+						options={this.state.options__vs_currency}
+						value={this.state.query.vs_currency}
+						onChange={(val) => this.onChange("vs_currency", val)}
+					/>
+				</Space>
+				<Space className="flex flex-col items-start">
+					<label>標記以包含平台合約地址</label>
+					<Switch
+						checkedChildren="是"
+						unCheckedChildren="否"
+						onChange={(include_platform) => {
+							this.setState({
+								query: {
+									...this.state.query,
+									ids: [],
+								},
+							});
+							this.getCoinList(include_platform);
+						}}
+					/>
+				</Space>
+				<Space className="flex flex-col items-start">
+					<label>篩選欲顯示之幣別</label>
+					<Select
+						placeholder="選擇幣別"
+						style={{
+							width: 200,
+						}}
+						mode="multiple"
+						allowClear
+						loading={this.state.loading__coin_list}
+						options={this.state.options__coin_list}
+						value={this.state.query.ids}
+						onChange={(val) => this.onChange("ids", val)}
+					/>
+				</Space>
+				<Space className="flex flex-col items-start">
+					<label>篩選類別</label>
+					<Select
+						placeholder="選擇類別"
+						style={{
+							width: 200,
+						}}
+						allowClear
+						showSearch
+						loading={this.state.loading__category_list}
+						options={this.state.options__category_list}
+						value={this.state.query.category}
+						onChange={(val) => this.onChange("category", val)}
+					/>
+				</Space>
 			</Space>
 		);
 	}
