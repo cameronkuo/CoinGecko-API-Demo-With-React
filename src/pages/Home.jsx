@@ -7,6 +7,12 @@ import Filters from "components/Filters";
 import InfiniteScrollTable from "components/InfiniteScrollTable";
 import Sparkline from "components/Sparkline";
 
+const price_change_percentage = (val) => (
+	<span className={val >= 0 ? "text-[#e15241]" : "text-[#23AF7D]"}>
+		{numeral(val).format("0,0[.]0") + "%"}
+	</span>
+);
+
 const columns = [
 	{
 		title: "",
@@ -39,26 +45,37 @@ const columns = [
 		render: (val, { symbol }) => `${val} (${symbol.toUpperCase()})`,
 	},
 	{
-		title: "匯率",
+		title: "Price",
 		dataIndex: "current_price",
-		width: "150px",
 		render: (val) => numeral(val).format("0,0.[0000000000]"),
 	},
 	{
-		title: "24小時交易量",
+		title: "1h",
+		dataIndex: "price_change_percentage_1h_in_currency",
+		render: price_change_percentage,
+	},
+	{
+		title: "24h",
+		dataIndex: "price_change_percentage_24h_in_currency",
+		render: price_change_percentage,
+	},
+	{
+		title: "7d",
+		dataIndex: "price_change_percentage_7d_in_currency",
+		render: price_change_percentage,
+	},
+	{
+		title: "24 Volume",
 		dataIndex: "total_volume",
-		width: "150px",
-		render: (val) => numeral(val).format("0,0.[00000]"),
+		sortBy: {
+			desc: "volume_desc",
+			asc: "volume_asc",
+		},
+		render: (val) => numeral(val).format("0,0"),
 	},
 	{
-		title: "24小時匯率變化",
-		dataIndex: "price_change_percentage_24h",
-		width: "150px",
-	},
-	{
-		title: "總市值",
+		title: "Mkt Cap",
 		dataIndex: "market_cap",
-		width: "150px",
 		sortBy: {
 			desc: "market_cap_desc",
 			asc: "market_cap_asc",
@@ -66,9 +83,22 @@ const columns = [
 		render: (val) => numeral(val).format(),
 	},
 	{
-		title: "最近７天",
+		title: "FDV",
+		dataIndex: "fully_diluted_valuation",
+	},
+	{
+		title: "Mkt Cap/FDV",
+		dataIndex: "market_cap/FDV",
+		render: (__, { market_cap, fully_diluted_valuation }) => {
+			const divide = numeral(market_cap / fully_diluted_valuation).format(
+				"0,0.00"
+			);
+			return divide === "NaN" ? "-" : divide;
+		},
+	},
+	{
+		title: "Last 7 Days",
 		dataIndex: "sparkline_in_7d",
-		width: "150px",
 		render: (val) => <Sparkline data={val.price} />,
 	},
 ];
@@ -89,6 +119,7 @@ class App extends React.Component {
 				category: "",
 				sparkline: true,
 				order: "market_cap_desc",
+				price_change_percentage: ["1h", "24h", "7d"],
 			},
 		};
 		this.filterRef = React.createRef();
@@ -143,10 +174,10 @@ class App extends React.Component {
 	render() {
 		return (
 			<>
-				<TextArea
+				{/* <TextArea
 					value={JSON.stringify(this.state.coinsMarkets, null, 4)}
 					autoSize={{ minRows: 3, maxRows: 10 }}
-				/>
+				/> */}
 				<Filters
 					ref={this.filterRef}
 					defaultQuery={this.state.query}
@@ -169,6 +200,8 @@ class App extends React.Component {
 						);
 					}}
 				/>
+				<br />
+				<br />
 				<InfiniteScrollTable
 					columns={columns}
 					dataSource={this.state.coinsMarkets}
