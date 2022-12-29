@@ -11,17 +11,24 @@ const columns = [
 	{
 		title: "",
 		dataIndex: "image",
-		width: "100px",
-		className: ["sticky", "left-0", "bg-[var(--var-background-dark)]", "z-10"],
-		render: (val, { name }) => <img src={val} alt={name} className="w-8" />,
+		className: [
+			"sticky",
+			"left-0",
+			"!w-10",
+			"bg-[var(--var-background-dark)]",
+			"z-10",
+		],
+		render: (val, { name }) => (
+			<img src={val} alt={name} className="!w-6 max-w-none" />
+		),
 	},
 	{
 		title: "Coin",
 		dataIndex: "name",
-		width: "200px",
 		className: [
 			"sticky",
-			"left-[100px]",
+			"left-10",
+			"!w-60",
 			"bg-[var(--var-background-dark)]",
 			"z-10",
 		],

@@ -36,7 +36,7 @@ const App = (props) => {
 					<h3 style={{ textAlign: "center" }}>&#8593; Release to refresh</h3>
 				}
 			>
-				<table className="w-full table-fixed">
+				<table className="w-full">
 					<thead>
 						<tr>
 							{props.columns.map((column) => (
@@ -73,12 +73,12 @@ const App = (props) => {
 						{props.dataSource.map((row) => (
 							<tr
 								key={row.id}
-								className="border-solid border-b border-gray-500 hover:bg-[rgba(249,250,251,0.1)]"
+								className="border-solid border-t border-gray-500 group"
 							>
 								{props.columns.map((column) => (
 									<td
 										key={column.dataIndex}
-										className={["z-0"]
+										className={["z-0", "group-hover:bg-[#1e2332]"]
 											.concat(tdClasses)
 											.concat(column.className)
 											.join(" ")}
