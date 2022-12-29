@@ -2,7 +2,7 @@ import React from "react";
 import { Spin } from "antd";
 import numeral from "numeral";
 import { __api_getCoinsMarkets, __api_ping } from "utils/api";
-import TextArea from "antd/es/input/TextArea";
+// import TextArea from "antd/es/input/TextArea";
 import Filters from "components/Filters";
 import InfiniteScrollTable from "components/InfiniteScrollTable";
 import Sparkline from "components/Sparkline";

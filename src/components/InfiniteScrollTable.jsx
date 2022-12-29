@@ -10,6 +10,7 @@ const App = (props) => {
 
 	useEffect(() => {
 		if (sortBy !== defaultSortBy) onSort(sortBy);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sortBy]);
 
 	return (
@@ -48,6 +49,9 @@ const App = (props) => {
 										"bg-[var(--var-background-dark)]",
 									]
 										.concat(tdClasses)
+										.concat(
+											column.className?.includes("sticky") ? ["!z-[99]"] : []
+										)
 										.concat(column.className)
 										.concat(column.sortBy ? "cursor-pointer" : [])
 										.concat()
@@ -73,14 +77,16 @@ const App = (props) => {
 					</thead>
 					<tbody>
 						{props.dataSource.map((row) => (
-							<tr
-								key={row.id}
-								className="border-solid border-t border-gray-500 group"
-							>
+							<tr key={row.id} className="group">
 								{props.columns.map((column) => (
 									<td
 										key={column.dataIndex}
-										className={["z-0", "group-hover:bg-[#1e2332]"]
+										className={[
+											"group-hover:bg-[#1e2332]",
+											"border-solid",
+											"border-t",
+											"border-gray-500",
+										]
 											.concat(tdClasses)
 											.concat(column.className)
 											.join(" ")}
