@@ -53,10 +53,12 @@ const App = (props) => {
 										.concat()
 										.join(" ")}
 									onClick={() => {
-										if (sortBy === column.sortBy.desc)
-											setSortBy(column.sortBy.asc);
-										else if (sortBy === column.sortBy.asc) setSortBy("");
-										else setSortBy(column.sortBy.desc);
+										if (column.sortBy) {
+											if (sortBy === column.sortBy.desc)
+												setSortBy(column.sortBy.asc);
+											else if (sortBy === column.sortBy.asc) setSortBy("");
+											else setSortBy(column.sortBy.desc);
+										}
 									}}
 									style={{
 										width: column.width,
