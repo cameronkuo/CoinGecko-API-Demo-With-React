@@ -9,7 +9,9 @@ function App() {
 				algorithm: theme.darkAlgorithm,
 			}}
 		>
-			<Outlet />
+			<main className="max-w-7xl m-auto px-5 py-[5%]">
+				<Outlet />
+			</main>
 		</ConfigProvider>
 	);
 }
