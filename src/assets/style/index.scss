@@ -1,15 +1,11 @@
 @import "./tailwind.css";
 
-:root {
-	--var-background-dark: #131722;
-}
-
 html {
 	min-height: 100%;
 }
 
 html,
 body {
-	background: var(--var-background-dark);
+	@apply bg-dark;
 	color: #d1d4dc;
 }

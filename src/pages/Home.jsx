@@ -1,6 +1,6 @@
-import React from "react";
 import { Spin } from "antd";
 import numeral from "numeral";
+import React from "react";
 import { __api_getCoinsMarkets, __api_ping } from "utils/api";
 // import TextArea from "antd/es/input/TextArea";
 import Filters from "components/Filters";
@@ -17,13 +17,7 @@ const columns = [
 	{
 		title: "",
 		dataIndex: "image",
-		className: [
-			"sticky",
-			"left-0",
-			"!w-10",
-			"bg-[var(--var-background-dark)]",
-			"z-10",
-		],
+		className: ["sticky", "left-0", "!w-10", "bg-dark", "z-10"],
 		render: (val, { name }) => (
 			<img src={val} alt={name} className="!w-6 max-w-none" />
 		),
@@ -31,13 +25,7 @@ const columns = [
 	{
 		title: "Coin",
 		dataIndex: "name",
-		className: [
-			"sticky",
-			"left-10",
-			"!w-60",
-			"bg-[var(--var-background-dark)]",
-			"z-10",
-		],
+		className: ["sticky", "left-10", "!w-60", "bg-dark", "z-10"],
 		sortBy: {
 			desc: "id_desc",
 			asc: "id_asc",

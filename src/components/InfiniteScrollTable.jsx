@@ -43,11 +43,7 @@ const App = (props) => {
 							{props.columns.map((column) => (
 								<th
 									key={column.dataIndex}
-									className={[
-										"sticky",
-										"top-0",
-										"bg-[var(--var-background-dark)]",
-									]
+									className={["sticky", "top-0", "bg-dark"]
 										.concat(tdClasses)
 										.concat(
 											column.className?.includes("sticky") ? ["!z-[99]"] : []
