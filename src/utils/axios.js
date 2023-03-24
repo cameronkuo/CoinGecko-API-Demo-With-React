@@ -1,10 +1,9 @@
-import axios from "axios";
 import { notification } from "antd";
+import axios from "axios";
 
 // create an axios instance
 const service = axios.create({
-	baseURL: "https://api.coingecko.com/api/v3", // api 的 base_url
-	timeout: 5000, // request timeout
+	baseURL: process.env.REACT_APP_API_BASE, // api 的 base_url
 });
 
 // request interceptor
